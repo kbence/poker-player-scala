@@ -1,0 +1,38 @@
+apply plugin:'scala'
+apply plugin:'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.1'
+    compile 'io.spray:spray-can_2.11:1.3.2'
+    compile 'io.spray:spray-routing_2.11:1.3.2'
+    compile 'io.spray:spray-json_2.11:1.3.1'
+    compile 'com.typesafe.akka:akka-actor_2.11:2.3.7'
+
+    testCompile 'org.specs2:specs2_2.11:2.3.7'
+    testCompile 'io.spray:spray-testkit_2.11:1.3.2'
+}
+
+version = 'git describe --long'.execute().text.trim()
+mainClassName = 'com.leanpoker.PlayerService'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
+jar.configure {
+    manifest {
+        attributes 'Implementation-Title': 'Poker-Player-Scala',
+                'Implementation-Version': version,
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Main-Class': mainClassName
+    }
+}
+
+task stage(dependsOn: installApp)
+
